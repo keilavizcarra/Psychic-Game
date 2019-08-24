@@ -1,59 +1,66 @@
-var letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
-               't', 'u', 'v', 'w', 'x', 'y', 'z'];
-var computerGuesses;
-var userGuesses = [];
-var wins = 0;
-var losses = 0;
+var letters = ['a', 'b', 'c']
+var guessedLetters = [];
+
+var letterToGuess = null;
+
 var guessesLeft = 9;
 
-var updateComputerGuesses=function() {
-    var nComputerGuesses =letters[ Math.floor(Math.random()*letter.length)];
-    computerGuesses= String.fromCharCode(97 + nComputerGuesses);
-    console.log("computerGuesses =" + computerGuesses);
+
+var wins = 0;
+var losses = 0;
+
+
+var updateGuessesLeft = function() {
+
+  document.querySelector("#guesses-left").innerHTML = guessesLeft;
 };
 
-var updateUserGuesses=function() {
-    document.querySelector("#UserGuesses").innerHTML = "user guesses = " + userGuesses;
+var updateLetterToGuess = function() {
+
+  letterToGuess = letters[Math.floor(Math.random() * letters.length)];
 };
 
-var updateWins=function() {
-    document.querySelector("#Wins").innerHTML = "wins = " + wins;
+var updateGuessesSoFar = function() {
+
+  document.querySelector("#guesses-so-far").innerHTML = guessedLetters.join(", ");
 };
 
-var updateLosses=function() {
-    document.querySelector("#Losses").innerHTML = "losses = " + losses;
+var reset = function() {
+  guessesLeft = 9;
+  guessedLetters = [];
+  updateLetterToGuess();
+  updateGuessesLeft();
+  updateGuessesSoFar();
 };
 
-var updateGuessesLeft=function() {
-    document.querySelector("#GuessesLeft").innerHTML = "guessesLeft = " + guessesLeft;
-};
+updateLetterToGuess();
+updateGuessesLeft();
 
-function reset() {
-    console.log('reset');
-}
+document.onkeydown = function(event) {
 
-reset();
+  guessesLeft--;
 
-document.onkeyup = function(event) {
-    console.log('onKeyUp')
-    var keyEntered = event.key.toLowerCase();
-    userGuesses.push(keyEntered);
-    guessesLeft--;
+  
+  var letter = event.key.toLowerCase();
+  guessedLetters.push(letter);
 
-    if (computerGuesses == keyEntered) {
-        wins++;
-        reset();
-    }
+  
+  updateGuessesLeft();
+  updateGuessesSoFar();
 
-    if (guessesLeft === 0) {
-        losses++;
-        reset();
-    }
+  if (letter === letterToGuess) {
+    wins++;
+    document.querySelector("#wins").innerHTML = wins;
+    reset();
+  }
 
-    else {
-        updateUserGuesses();
-        updateGuessesLeft();
-    }
+  if (guessesLeft === 0) {
+    losses++;
+    document.querySelector("#losses").innerHTML = losses;
+
+    
+    reset();
+  }
 };
 
     
